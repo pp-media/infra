@@ -12,8 +12,8 @@ Goals;
 
 
 what technologies are we considering to leverage?
-Ansible
-Docker
-OME (oven media engine
-kubernetes (do we need 2 containerized services?)
-linux is highly considered!
+1. Ansible
+2. Docker
+3. OME (oven media engine
+4. kubernetes (do we need 2 containerized services?)
+5. linux is highly considered!
