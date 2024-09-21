@@ -1,6 +1,17 @@
 # infra
-Infrastructure playbooks
 
+> Inspired by https://github.com/FOSDEM/infrastructure/tree/master/ansible
+
+## Set up the vault password
+
+Secrets are encrypted with [ansible-vault](http://docs.ansible.com/ansible/playbooks_vault.html).
+
+To use ansible-vault transparently, create a file with the shared secret and export it via an environment variable.
+
+Ask @kfh on Slack for the secret if you need it :)
+
+    echo "SECRET" > ~/.ppmedia_vault_pass.txt
+    export ANSIBLE_VAULT_PASSWORD_FILE=~/.ppmedia_vault_pass.txt
 
 Goals;
 1. create a redeployable system that can be used year after year, with low maintenance
