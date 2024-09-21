@@ -9,3 +9,11 @@ Goals;
 4. create a docker or kubernetes system/cluster to automate transcoding
 5. create manuals for how to attach our media storage to local machines
 6. learn stuff!
+
+
+what technologies are we considering to leverage?
+Ansible
+Docker
+OME (oven media engine
+kubernetes (do we need 2 containerized services?)
+linux is highly considered!
