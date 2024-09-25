@@ -1,0 +1,12 @@
+pxe_tftpboot_dir              : /opt/tftpboot
+pxe_debian_mirror             : 'ftp.acc.umu.se'
+pxe_server_ip                 : '192.168.111.2'
+
+pxe_preseed_locale            : 'en_GB.UTF-8'
+pxe_preseed_installer_lang    : 'en'
+pxe_preseed_country           : 'NO'
+pxe_preseed_keyboard          : 'no'
+pxe_preseed_domain            : 'media.polarparty.no'
+pxe_preseed_timezone          : 'Europe/Oslo'
+pxe_preseed_ntp_server        : 'no.pool.ntp.org'
+pxe_preseed_root_pubkey       : 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINydHN7TuuoPCE3Fjq8yMV3krOvznrvpFlMyUpUuQS1r kfh'

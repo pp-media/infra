@@ -1,0 +1,69 @@
+---
+  - name: "Install Packages"
+    apt:
+      name: "{{ packages }}"
+      update_cache: yes
+    vars:
+      packages:
+      - pxelinux
+      - syslinux-common
+      - tftpd-hpa
+
+  - name: "Add TFTPD config"
+    template:
+      src: tftpd-hpa.j2
+      dest: /etc/default/tftpd-hpa
+      owner: root
+      group: root
+      mode: 0755
+      
+  - name: "Create TFTP root"
+    file:
+      path: "{{ pxe_tftpboot_dir }}/pxelinux.cfg"
+      state: directory
+      owner: tftp
+      group: tftp
+      mode: 0755
+    notify:
+      - restart_networking
+
+  - name: "Restart tftpd service"
+    sysvinit:
+      name: tftpd-hpa
+      state: restarted
+      enabled: yes
+      
+  - name: "Populate TFTP root"
+    copy:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      remote_src: yes
+    with_items:
+      - { src: '/usr/lib/PXELINUX/pxelinux.0', dest: '{{ pxe_tftpboot_dir }}/pxelinux.0' }
+      - { src: '/usr/lib/syslinux/modules/bios/menu.c32', dest: '{{ pxe_tftpboot_dir }}/menu.c32' }
+      - { src: '/usr/lib/syslinux/modules/bios/ldlinux.c32', dest: '{{ pxe_tftpboot_dir }}/ldlinux.c32' } 
+      - { src: '/usr/lib/syslinux/modules/bios/libmenu.c32', dest: '{{ pxe_tftpboot_dir }}/libmenu.c32' } 
+      - { src: '/usr/lib/syslinux/modules/bios/libutil.c32', dest: '{{ pxe_tftpboot_dir }}/libutil.c32' } 
+  
+  - name: "Transfer template default.j2 to /opt/tftpboot/pxelinux.cfg/default"
+    template:
+      src: default.j2
+      dest: /opt/tftpboot/pxelinux.cfg/default
+      owner: root
+      group: root
+      mode: 0755
+
+  - name: "Import task os-debian-12.7.0-amd64.yml"
+    import_tasks: os-debian-12.7.0-amd64.yml
+     
+  - name: "Allow 67 and Port 69 on protocol tcp/udp through UFW"
+    ufw:
+      rule: allow
+      port: "{{ item.port }}"
+      proto: "{{ item.proto }}"
+      log: yes
+    with_items:
+      - { port: '67', proto: 'tcp' } 
+      - { port: '69', proto: 'tcp' } 
+      - { port: '67', proto: 'udp' } 
+      - { port: '69', proto: 'udp' } 

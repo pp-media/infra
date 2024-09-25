@@ -1,0 +1,20 @@
+---
+- name: Add media group
+  group:
+    name: media
+    gid: "{{ user_media_gid | default('1000') }}"
+
+- name: Add media user
+  user:
+    name: media
+    comment: "PP-Media user"
+    uid: "{{ user_media_uid | default('1000') }}"
+    group: media
+    shell: /bin/bash
+    password: "{{ user_media_password | default('') }}"
+
+- name: Add ssh keys to media user
+  authorized_key:
+    user: media
+    key: "{{ lookup('file', '../pubkeys/'+item+'.pub') }}"
+  with_items: "{{ ssh_users }}"
