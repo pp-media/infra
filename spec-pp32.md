@@ -13,21 +13,21 @@ Twitch RTMP to polarparty
 
 *@kfh has credentials for login*
 
-    * Encoder spec
-        * 1080p50 @ 12 Mbps (or 6 Mbps -- need to test)
-        * h264
-        * Rate: CBR
-        * Keyframe interval: 2 sec/100 frames
-        * Profile: High
-        * Audio: AAC-LC Stereo @ 160 kbps
-    * Ingest URL: rtmp://osl.contribute.live-video.net/app/{stream_key}
+* Encoder spec
+    * 1080p50 @ 12 Mbps (or 6 Mbps -- need to test)
+    * h264
+    * Rate: CBR
+    * Keyframe interval: 2 sec/100 frames
+    * Profile: High
+    * Audio: AAC-LC Stereo @ 160 kbps
+* Ingest URL: rtmp://osl.contribute.live-video.net/app/{stream_key}
 
 **VOD delivery**
 YouTube to polarpartyno
 
-    * 1080p50
-    * ProRes 422 HQ (best Youtube can ingest)
-        * Needs to be tested -- review if it doesn't work
+* 1080p50
+* ProRes 422 HQ (best Youtube can ingest)
+    * Needs to be tested -- review if it doesn't work
 
 **Live flow**
 
@@ -53,7 +53,7 @@ YouTube to polarpartyno
 
 ## Infra
 
-OS: Debian 12.7.0
-Provisioning: PXE from RPi
-Config mgmg: Ansible playbooks
-Secret management: Ansible Vault
+* OS: Debian 12.7.0
+* Provisioning: PXE from RPi
+* Config mgmg: Ansible playbooks
+* Secret management: Ansible Vault
