@@ -1,0 +1,11 @@
+---
+
+- name: Setup PXE
+  hosts: bootstrap
+  remote_user: root
+  tags: [pxe]
+  roles:
+  - role: pxe
+    vars:
+      # Replace this with vault var when that's working properly
+      tailscale_authkey: "{{ lookup('env', 'TAILSCALE_KEY') }}"

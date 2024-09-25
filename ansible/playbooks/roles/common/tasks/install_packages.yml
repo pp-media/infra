@@ -1,0 +1,17 @@
+---
+- name: "Install packages"
+  apt:
+    state: latest
+    install_recommends: true
+    # We shouldn't need to update the cache here as that's handled by the
+    # previous step, but that doesn't work properly for some reason...
+    update_cache: true
+    package:
+    - curl
+    - file
+    - git
+    - htop
+    - less
+    - mtr
+    - sudo
+    - vim

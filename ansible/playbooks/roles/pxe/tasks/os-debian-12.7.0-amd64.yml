@@ -1,0 +1,58 @@
+---
+  - name: "Create directory /tmp/deb-12.7.0-netboot"
+    file:
+      name: /tmp/deb-12.7.0-netboot
+      state: directory
+
+  - name: "Download Debian 12.7.0 AMD64 (netinstall)"
+    unarchive:
+      # src: "http://archive.ubuntu.com/ubuntu/dists/xenial-updates/main/installer-amd64/current/images/netboot/netboot.tar.gz"
+      src: "https://{{ pxe_debian_mirror }}/debian/dists/bookworm/main/installer-amd64/current/images/netboot/netboot.tar.gz"
+      dest: /tmp/deb-12.7.0-netboot
+      remote_src: yes
+
+  - name: "Create directory {{ pxe_tftpboot_dir }}/images/debian/12.7.0"
+    file:
+      name: "{{ pxe_tftpboot_dir }}/images/debian/12.7.0"
+      state: directory
+
+  - name: "Copy files"
+    copy:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      remote_src: yes
+    with_items:
+      - { src: '/tmp/deb-12.7.0-netboot/debian-installer/amd64/linux', dest: '{{ pxe_tftpboot_dir }}/images/debian/12.7.0/linux' } 
+      - { src: '/tmp/deb-12.7.0-netboot/debian-installer/amd64/initrd.gz', dest: '{{ pxe_tftpboot_dir }}/images/debian/12.7.0/initrd.gz' } 
+      - { src: '/tmp/deb-12.7.0-netboot/debian-installer/amd64/grubx64.efi', dest: '{{ pxe_tftpboot_dir }}/images/debian/12.7.0/linux' } 
+      - { src: '/tmp/deb-12.7.0-netboot/debian-installer/amd64/grub', dest: '{{ pxe_tftpboot_dir }}/images/debian/12.7.0/initrd.gz' } 
+
+  - name: "Copy Template os-debian-12.7.0-amd64-preseed.cfg.j2 to {{ pxe_tftpboot_dir }}/images/debian/12.7.0/os-debian-12.7.0-amd64-preseed.cfg"
+    template:
+      src: os-debian-12.7.0-amd64-preseed.cfg.j2
+      dest: "{{ pxe_tftpboot_dir }}/images/debian/12.7.0/os-debian-12.7.0-amd64-preseed.cfg"
+      
+  - name: "Add Debian 12.7.0 amd64 to {{ pxe_tftpboot_dir }}/pxelinux.cfg/default"
+    blockinfile:
+      path: "{{ pxe_tftpboot_dir }}/pxelinux.cfg/default"
+      marker: "## {mark} ANSIBLE - Debian 12.7.0 (default)"
+      block: |
+        MENU SEPARATOR
+        label Debian 12.7.0 (default)
+        menu Debian 12.7.0 (default)
+        kernel /images/debian/12.7.0/linux
+        append initrd=/images/debian/12.7.0/initrd.gz vga=788 
+      state: present
+      backup: yes
+      
+  - name: "Add Debian 12.7.0 amd64 to {{ pxe_tftpboot_dir }}/pxelinux.cfg/default"
+    blockinfile:
+      path: "{{ pxe_tftpboot_dir }}/pxelinux.cfg/default"
+      marker: "## {mark} ANSIBLE - Debian 12.7.0 (preseed)"
+      block: |
+        label Debian 12.7.0 (preseed)
+        menu Debian 12.7.0 (preseed)
+        kernel /images/debian/12.7.0/linux
+        append initrd=/images/debian/12.7.0/initrd.gz vga=788 url=tftp://{{ pxe_server_ip }}/images/debian/12.7.0/os-debian-12.7.0-amd64-preseed.cfg locale={{ pxe_preseed_locale }} keyboard-configuration/layoutcode={{ pxe_preseed_keyboard }}
+      state: present
+      backup: yes

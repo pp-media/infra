@@ -1,0 +1,104 @@
+# # When copying: check for references to 12.7.0 and bookworm
+
+# Base config for the installer
+d-i debian-installer/language string {{ pxe_preseed_installer_lang }}
+d-i debian-installer/country string {{ pxe_preseed_country }}
+d-i debian-installer/locale string {{ pxe_preseed_locale }}
+
+# Network
+## Auto-configure interface
+d-i netcfg/choose_interface select auto
+## Host domain
+d-i netcfg/get_domain string {{ pxe_preseed_domain }}
+# Disable that annoying WEP key dialog.
+d-i netcfg/wireless_wep string
+# Always try to load nonfree HW firmware if available
+d-i hw-detect/load_firmware boolean true
+
+# Mirror setting
+## Trigger manual country selection for mirror (TODO: automate)
+d-i mirror/country string manual
+## Set mirror hostname from group variable
+d-i mirror/http/hostname string {{ pxe_debian_mirror }}
+## Set mirrror root URL path
+d-i mirror/http/directory string /debian
+
+# Hostname
+## Set hostname from TODO
+d-i netcfg/get_hostname string unassigned-hostname
+## Set domain from TODO
+d-i netcfg/get_domain string unassigned-domain
+
+# Account
+## Do not create user
+d-i passwrd/make-user boolean false
+## Do not encrypt user home dirs
+d-i user-setup/encrypt-home boolean false
+
+# Clock & Timezone
+## Expect HW clock to be set to UTC
+d-i clock-setup/utc boolean true
+## Set the timezone from group var (TODO: maybe a global playbook var instead?)
+d-i time/zone string {{ pxe_preseed_timezone }}
+## Use NTP to keep clocks in sync
+d-i clock-setup/ntp boolean true
+## Set NTP server
+d-i clock-setup/ntp-server string {{ pxe_preseed_ntp_server }}
+
+# Partitioning
+d-i partman-auto/method string lvm
+d-i partman-lvm/device_remove_lvm boolean true
+d-i partman-md/device_remove_md boolean true
+d-i partman-lvm/confirm boolean true
+d-i partman-lvm/confirm_nooverwrite boolean true
+d-i partman-auto-lvm/guided_size string 80%
+d-i partman-auto/choose_recipe select atomic
+d-i partman/default_filesystem string ext4
+d-i partman-partitioning/confirm_write_new_label boolean true
+d-i partman/choose_partition select finish
+d-i partman/confirm boolean true
+d-i partman/confirm_nooverwrite boolean true
+
+# Package selection (tasksel --list-tasks)
+## Only run as SSH server to start with
+tasksel tasksel/first multiselect ssh-server
+## Packages to install
+d-i pkgsel/include string openssh-server build-essential wget
+
+# Individual packages (python-minimal for Ansible)
+# # TODO: python-minimal causes crash; package does not exist in repo
+# d-i pkgsel/include string python-minimal
+
+# Packages/apt
+## Use non-free firmware through apt
+d-i apt-setup/non-free-firmware boolean true
+## Use non-free software through apt
+d-i apt-setup/non-free boolean true
+## Use contrib software through apt
+d-i apt-setup/contrib boolean true
+
+# Bootloader
+d-i grub-installer/only_debian boolean true
+d-i grub-installer/with_other_os boolean true
+
+## Install tailscale and run autoconfig after reboot
+d-i preseed/late_command string \
+    mkdir -p /target/root/scripts ; \
+    echo -e "#!/usr/bin/sh\n\ntailscale up --authkey {{ tailscale_authkey }} --ssh && rm /target/root/scripts/ts-auth.sh && sed -i 's/*ts-auth\.sh*//' /etc/crontab" > /target/root/scripts/ts-auth.sh ; \
+    chmod +x /target/root/scripts/ts-auth.sh ; \
+    echo -e "\n@reboot\troot\t/root/scripts/ts-auth.sh" >> /target/etc/crontab ; \
+    wget -q -O /target/usr/share/keyrings/tailscale-archive-keyring.gpg https://pkgs.tailscale.com/stable/debian/bookworm.noarmor.gpg ; \
+    wget -q -O /target/etc/apt/sources.list.d/tailscale.list https://pkgs.tailscale.com/stable/debian/bookworm.tailscale-keyring.list ; \
+    in-target apt-get update ; \
+    in-target apt-get install -y tailscale 
+
+# Add SSH key to root
+d-i preseed/late_command string in-target mkdir -p /root/.ssh; \
+    in-target /bin/sh -c "echo '{{ pxe_preseed_root_pubkey }}' >> /root/.ssh/authorized_keys"; \
+    in-target chown -R root:root /root/.ssh/; \
+    in-target chmod 644 /root/.ssh/authorized_keys; \
+    in-target chmod 700 /root/.ssh/
+
+# Avoid that last message about the install being complete.
+d-i finish-install/reboot_in_progress note
+

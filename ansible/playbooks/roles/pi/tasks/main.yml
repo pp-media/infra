@@ -1,0 +1,7 @@
+---
+- name: Install UFW firewall
+  apt: name=ufw update_cache=yes state=latest  
+  
+- name: Enable UFW
+  community.general.ufw:
+    state: enabled

@@ -1,0 +1,46 @@
+---
+##
+## Pre-tasks
+##
+
+- name: Global pre tasks
+  hosts: lunix
+  remote_user: root
+  gather_facts: false
+  pre_tasks:
+  - name: Verify Ansible meets version requirements.
+    assert:
+      that: "ansible_version.full is version_compare('2.16', '>=')"
+      msg: >
+        "You must update Ansible to at least 2.16."
+
+  - name: Install ansible dependencies (python)
+    # install python3-apt to avoid needlesly triggering the next test
+    raw: test -e /usr/bin/python3 || (apt-get -y update && apt-get install -y python3-minimal python3-apt)
+    changed_when: false  # raw has no change handler
+
+  - name: Install ansible dependencies (python3-apt)
+    raw: test -e /usr/lib/python3/dist-packages/apt/package.py || (apt-get -y update && apt-get install -y python3-apt)
+    changed_when: false  # raw has no change handler
+
+###
+### Common roles
+###
+
+# # Workaround for https://github.com/ansible/ansible/issues/57529
+# - hosts: all
+
+- name: Common roles
+  hosts: lunix
+  remote_user: root
+  tags: [common]
+  roles:
+  - common
+
+# # The Pis need to be set up with ufw for firewall, which is not installed by default
+# #   Might just want to solve this by adding ufw to the common task
+# - name: Raspberry pis
+#   hosts: pi
+#   remote_user: root
+#   roles:
+#   - pi
