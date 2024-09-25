@@ -1,0 +1,36 @@
+       _,met$$$$$gg.
+    ,g$$$$$$$$$$$$$$$P.
+  ,g$$P"         """Y$$.".
+ ,$$P'               `$$$.
+',$$P       ,ggs.     `$$b:
+`d$$'     ,"'   .    $$$
+ $$P      d     ,    $$$P
+ $$:      $.   -    ,d$$'
+ $$;      Y._   _,d'
+ Y$$.    `.`"Y$$$$P"'
+ `$$b      "-.__
+  `Y$$
+   `Y$$.
+     `$$b.
+       `Y$$b.
+          `"Y$b._
+             `"""[1G[16A[31Cmedia@uis-04
+[31C------------
+[31COS: Debian GNU/Linux bookworm 12.7 x86_64
+[31CKernel: Linux 6.1.0-25-amd64
+[31CUptime: 13 hours, 56 mins
+[31CPackages: 433 (dpkg)
+[31CShell: python3
+[31CDisplay (BenQ RL2450H): 1920x1080 @ 60 Hz in 24″
+[31CCursor: Adwaita
+[31CTerminal: 
+[31CCPU: Intel(R) Core(TM) i5-4250U (4) @ 2.60 GHz
+[31CGPU: Intel Haswell-ULT Integrated Graphics Controller @ 1.00 GHz [Integrated]
+[31CMemory: 561.68 MiB / 15.52 GiB (4%)
+[31CSwap: 0 B / 976.00 MiB (0%)
+[31CDisk (/): 1.76 GiB / 86.15 GiB (2%) - ext4
+[31CLocal IP (eno1): 192.168.111.166/24
+[31CLocale: en_GB.UTF-8
+[31C
+[31C[40m   [41m   [42m   [43m   [44m   [45m   [46m   [47m   [m
+[31C[100m   [101m   [102m   [103m   [104m   [105m   [106m   [107m   [m
