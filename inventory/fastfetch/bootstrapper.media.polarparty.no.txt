@@ -1,0 +1,35 @@
+       _,met$$$$$gg.
+    ,g$$$$$$$$$$$$$$$P.
+  ,g$$P"         """Y$$.".
+ ,$$P'               `$$$.
+',$$P       ,ggs.     `$$b:
+`d$$'     ,"'   .    $$$
+ $$P      d     ,    $$$P
+ $$:      $.   -    ,d$$'
+ $$;      Y._   _,d'
+ Y$$.    `.`"Y$$$$P"'
+ `$$b      "-.__
+  `Y$$
+   `Y$$.
+     `$$b.
+       `Y$$b.
+          `"Y$b._
+             `"""[1G[16A[31Cmedia@bootstrapper
+[31C------------------
+[31COS: Debian GNU/Linux bookworm 12.6 aarch64
+[31CHost: Raspberry Pi 3 Model B Rev 1.2
+[31CKernel: Linux 6.6.31+rpt-rpi-v8
+[31CUptime: 2 days, 16 hours, 39 mins
+[31CPackages: 1559 (dpkg)
+[31CShell: python3
+[31CCursor: Adwaita
+[31CTerminal: 
+[31CCPU: Cortex-A53*4 (4) @ 1.20 GHz
+[31CMemory: 286.63 MiB / 907.33 MiB (32%)
+[31CSwap: 126.50 MiB / 200.00 MiB (63%)
+[31CDisk (/): 4.89 GiB / 234.24 GiB (2%) - ext4
+[31CLocal IP (wlan0): 192.168.10.151/24
+[31CLocale: en_GB.UTF-8
+[31C
+[31C[40m   [41m   [42m   [43m   [44m   [45m   [46m   [47m   [m
+[31C[100m   [101m   [102m   [103m   [104m   [105m   [106m   [107m   [m

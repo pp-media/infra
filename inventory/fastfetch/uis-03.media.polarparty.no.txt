@@ -1,0 +1,36 @@
+       _,met$$$$$gg.
+    ,g$$$$$$$$$$$$$$$P.
+  ,g$$P"         """Y$$.".
+ ,$$P'               `$$$.
+',$$P       ,ggs.     `$$b:
+`d$$'     ,"'   .    $$$
+ $$P      d     ,    $$$P
+ $$:      $.   -    ,d$$'
+ $$;      Y._   _,d'
+ Y$$.    `.`"Y$$$$P"'
+ `$$b      "-.__
+  `Y$$
+   `Y$$.
+     `$$b.
+       `Y$$b.
+          `"Y$b._
+             `"""[1G[16A[31Cmedia@uis-03
+[31C------------
+[31COS: Debian GNU/Linux bookworm 12.7 x86_64
+[31CHost: NUC7i7DNKE (J85069-206)
+[31CKernel: Linux 6.1.0-25-amd64
+[31CUptime: 14 hours, 6 mins
+[31CPackages: 433 (dpkg)
+[31CShell: python3
+[31CCursor: Adwaita
+[31CTerminal: 
+[31CCPU: Intel(R) Core(TM) i7-8650U (8) @ 4.20 GHz
+[31CGPU: Intel UHD Graphics 620 @ 1.15 GHz [Integrated]
+[31CMemory: 652.91 MiB / 31.22 GiB (2%)
+[31CSwap: 0 B / 976.00 MiB (0%)
+[31CDisk (/): 1.76 GiB / 173.67 GiB (1%) - ext4
+[31CLocal IP (eno1): 192.168.111.163/24
+[31CLocale: en_GB.UTF-8
+[31C
+[31C[40m   [41m   [42m   [43m   [44m   [45m   [46m   [47m   [m
+[31C[100m   [101m   [102m   [103m   [104m   [105m   [106m   [107m   [m
