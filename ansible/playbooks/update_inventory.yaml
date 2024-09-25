@@ -1,0 +1,13 @@
+---
+- hosts: lunix
+  remote_user: media
+  tasks:
+  - name: "Run fastfetch on host"
+    shell: fastfetch
+    register: fastfetch_out
+  
+  - name: "Copy the output to local inventory"
+    copy:
+      content: "{{ fastfetch_out.stdout }}"
+      dest: "{{ inventory_dir }}/../inventory/fastfetch/{{ inventory_hostname }}.txt"
+    delegate_to: localhost
