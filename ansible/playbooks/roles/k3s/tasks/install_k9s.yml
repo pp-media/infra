@@ -1,0 +1,10 @@
+---
+- name: "Install k9s (x86_64)"
+  apt:
+    deb: "https://github.com/derailed/k9s/releases/download/{{ k9s_release }}/k9s_linux_amd64.deb"
+  when: ansible_architecture == "x86_64"
+
+- name: "Install k9s (aarch64)"
+  apt:
+    deb: "https://github.com/derailed/k9s/releases/download/{{ k9s_release }}/k9s_linux_arm64.deb"
+  when: ansible_architecture == "aarch64"

@@ -23,6 +23,15 @@
     raw: test -e /usr/lib/python3/dist-packages/apt/package.py || (apt-get -y update && apt-get install -y python3-apt)
     changed_when: false  # raw has no change handler
 
+  - name: "Get name of wired physical interface"
+    shell: "find /sys/class/net -type l -not -lname '*virtual*' -printf '%f\n' | grep -e '^[^w]' | head -n 1"
+    register: _phy_if_cmd
+    check_mode: no
+
+  - name: "Register wired interface as fact"
+    ansible.builtin.set_fact:
+      phy_if: "{{ _phy_if_cmd.stdout }}"
+
 ###
 ### Common roles
 ###
@@ -37,10 +46,16 @@
   roles:
   - common
 
-# # The Pis need to be set up with ufw for firewall, which is not installed by default
-# #   Might just want to solve this by adding ufw to the common task
-# - name: Raspberry pis
-#   hosts: pi
-#   remote_user: root
-#   roles:
-#   - pi
+- name: k3s
+  hosts: k3s
+  remote_user: root
+  tags: [k3s]
+  roles:
+    - k3s
+
+- name: "Caspar CG"
+  hosts: casparcg
+  remote_user: root
+  tags: [ccg]
+  roles:
+    - "casparcg-server"

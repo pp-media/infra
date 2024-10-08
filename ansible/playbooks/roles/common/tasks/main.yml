@@ -1,26 +1,42 @@
 ---
-
-- name: Get git version
+- name: "Get git version"
   shell: git log -1 '--date=format:%Y-%m-%d %H:%M' '--pretty=format:%cd %h'  # noqa 303 305
   register: git_version
   delegate_to: localhost
   changed_when: false
 
+- ansible.builtin.include_tasks:
+    file: disable_suspend.yml
+  name: "Disable suspend"
 
 - ansible.builtin.include_tasks:
     file: configure_apt.yml
-
-- ansible.builtin.include_tasks:
-    file: configure_sshd.yml
+  name: "Configure apt"
 
 - ansible.builtin.include_tasks:
     file: install_packages.yml
+  name: "Install packages"
+
+- ansible.builtin.include_tasks:
+    file: configure_sshd.yml
+  name: "Configure SSHD"
+
+- ansible.builtin.include_tasks:
+    file: configure_network.yml
+  name: "Configure network"
+
+- ansible.builtin.include_tasks:
+    file: configure_firewall.yml
+  name: "Configure firewall"
 
 - ansible.builtin.include_tasks:
     file: install_fastfetch.yml
+  name: "Install fastfetch"
 
 - ansible.builtin.include_tasks:
     file: user_root.yml
+  name: "Set up root user"
 
 - ansible.builtin.include_tasks:
     file: user_media.yml
+  name: "Set up media user"

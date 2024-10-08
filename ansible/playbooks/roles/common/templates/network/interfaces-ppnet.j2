@@ -1,0 +1,50 @@
+# Managed by Ansible
+
+# Something weird with this file -- it triggers "RTELINK: File exists" on br101 on reload. Do a reboot instead for now
+
+# VLAN {{ vlan_wan }} WAN
+auto br{{ vlan_wan }}
+
+iface {{ phy_if }}.{{ vlan_wan }} inet manual
+    vlan-raw-device {{ phy_if }}
+
+iface br{{ vlan_wan }} inet dhcp
+    bridge_ports {{ phy_if }}.{{ vlan_wan }}
+
+# VLAN {{ vlan_ppmedia }} PP mmedia net untaggged
+auto br{{ vlan_ppmedia }}
+
+iface br{{ vlan_ppmedia }} inet static
+    address {{ addr_prefix_ppmedia }}.{{ hostid }}/24
+    gateway {{ gateway_ppmedia }}
+    bridge_ports {{ phy_if }}
+
+# VLAN {{ vlan_kandu }} KANDU media net
+auto br{{ vlan_kandu }}
+
+iface {{ phy_if }}.{{ vlan_kandu }} inet manual
+    vlan-raw-device {{ phy_if }}
+
+iface br{{ vlan_kandu }} inet static
+    address {{ addr_prefix_kandu }}.{{ 160 + hostid }}/{{ net_prefix_kandu }}
+    # No gateway since we don't want to route stuff out from this network
+    bridge_ports {{ phy_if }}.{{ vlan_kandu }}
+
+# # Placeholder -- not yet configured
+# # VLAN {{ vlan_dante }} DANTE net
+# auto br{{ vlan_dante }}
+# 
+# iface {{ phy_if }}.{{ vlan_dante }} inet manual
+#     vlan-raw-device {{ phy_if }}
+# 
+# iface br{{ vlan_dante }} inet manual
+#     bridge_ports {{ phy_if }}.{{ vlan_dante }}
+# 
+# # VLAN {{ vlan_artnet }} Art-net net
+# auto br{{ vlan_artnet }}
+# 
+# iface {{ phy_if }}.{{ vlan_artnet }} inet manual
+#     vlan-raw-device {{ phy_if }}
+# 
+# iface br{{ vlan_artnet }} inet manual
+#     bridge_ports {{ phy_if }}.{{ vlan_artnet }}

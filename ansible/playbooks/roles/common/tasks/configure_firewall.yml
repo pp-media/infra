@@ -1,0 +1,22 @@
+---
+- name: "Make sure ufw is enabled"
+  community.general.ufw:
+    state: enabled
+
+- name: "Open SSH port"
+  community.general.ufw:
+    rule: allow
+    port: ssh
+    proto: tcp
+
+- name: "Rate limit SSH connection (brute force)"
+  community.general.ufw:
+    rule: limit
+    port: ssh
+    proto: tcp
+
+- name: "Default to reject on WAN interface"
+  community.general.ufw:
+    default: "reject"
+    interface: "br{{ vlan_wan }}"
+    direction: "incoming"

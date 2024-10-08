@@ -1,0 +1,31 @@
+---
+- name: Install x11
+  apt:
+    name: "xorg"
+    state: latest
+
+- name: "Add contrib and non-free"
+  apt_repository:
+    state: present
+    repo: 'deb http://http.debian.net/debian/ bookworm main contrib non-free'
+
+- name: "Set up xorg.conf.d directory"
+  file:
+    dest: "/etc/X11/xorg.conf.d/"
+    state: "directory"
+
+- name: Install x11 packages
+  apt:
+    name: "{{item}}"
+    state: latest
+  with_items:
+    - dmenu
+    - gnuplot
+    - libxosd-dev
+    - rxvt-unicode
+    - spectrwm
+    - xclip
+    - xfonts-terminus
+    - xosd-bin
+    - xsel
+    - xvkbd

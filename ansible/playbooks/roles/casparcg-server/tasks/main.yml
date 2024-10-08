@@ -1,0 +1,9 @@
+---
+# Because we need X11 for CasparCG to play ball
+- ansible.builtin.include_tasks:
+    file: install_x11.yml
+  name: "Install X11"
+
+- ansible.builtin.include_tasks:
+    file: setup_casparcg.yml
+  name: "Set up CasparCG"

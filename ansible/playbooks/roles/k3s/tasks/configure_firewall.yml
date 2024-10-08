@@ -1,0 +1,40 @@
+---
+- name: "Open API server"
+  community.general.ufw:
+    rule: allow
+    port: 6443
+    proto: tcp
+    comment: "k3s API"
+
+- name: "Open HTTP/S for ingress across all interfaces"
+  community.general.ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop:
+    - 80
+    - 443
+
+- name: "Open for all traffic from k3s internode communication"
+  community.general.ufw:
+    rule: allow
+    src: "{{ item }}"
+    interface: "br{{ vlan_ppmedia }}"
+    direction: "in"
+    comment: "k3s internode"
+  loop:
+    - "{{ k3s_subnet_pods }}"
+    - "{{ k3s_subnet_services }}"
+
+- name: "Open k3s intercommunication ports"
+  community.general.ufw:
+    rule: allow
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+    interface: "br{{ vlan_ppmedia }}"
+    direction: "in"
+    comment: "k3s: {{ item.comment }}"
+  loop:
+    - {"proto": "tcp", "port": 2379, "comment": "etcd HA"}
+    - {"proto": "tcp", "port": 2380, "comment": "etcd HA"}
+    - {"proto": "tcp", "port": 10250, "comment": "kubelet metrics"}

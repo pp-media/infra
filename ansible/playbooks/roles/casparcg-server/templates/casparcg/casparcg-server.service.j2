@@ -1,0 +1,15 @@
+[Unit]
+Description=CasparCG server
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory={{ casparcg_content_dir }}
+# ExecStart=xterm -e /usr/bin/casparcg {{ casparcg_config_dir }}/casparcg.config
+ExecStart=/usr/bin/casparcg {{ casparcg_config_dir }}/casparcg.config
+RestartSec=1
+Restart=always
+StartLimitInterval=0
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,13 @@
+# ddclient.conf
+# Managed by Ansible
+
+ssl=yes
+daemon=5m
+
+use=if, if=br{{ vlan_wan }}
+protocol=cloudflare, \
+zone=media.polarparty.no, \
+ttl=1, \
+login={{ cloudflare_username }}, \
+password={{ cloudflare_api_key }}, \
+{{ ansible_hostname }}

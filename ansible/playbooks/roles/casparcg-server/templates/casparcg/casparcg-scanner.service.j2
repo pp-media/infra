@@ -1,0 +1,15 @@
+# Not being used atm
+[Unit]
+Description=CasparCG media scanner
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/CasparCG-server
+ExecStart=/opt/CasparCG-server/scanner
+RestartSec=1
+Restart=always
+StartLimitInterval=0
+
+[Install]
+WantedBy=default.target

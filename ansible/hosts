@@ -4,22 +4,55 @@
 [bootstrap]
 bootstrapper.media.polarparty.no ansible_host=100.111.0.2
 
-[pi]
-# Raspberry pi[s]
-bootstrapper.media.polarparty.no ansible_host=100.111.0.2
-
-[unassigned]
+[uis]
 uis-01.media.polarparty.no ansible_host=100.111.0.3
 uis-02.media.polarparty.no ansible_host=100.111.0.4
-uis-03.media.polarparty.no ansible_host=100.111.0.5  # 2 hdmi
+uis-03.media.polarparty.no ansible_host=100.111.0.5 # 2 hdmi
 uis-04.media.polarparty.no ansible_host=100.111.0.6
 uis-05.media.polarparty.no ansible_host=100.111.0.7
 uis-06.media.polarparty.no ansible_host=100.111.0.8
 uis-07.media.polarparty.no ansible_host=100.111.0.9
 
-[uis:children]
-unassigned
+[pi_2b]
+# Generic Raspberry Pis 2Bs
+
+[pi_3b]
+# Generic Raspberry Pis 3Bs
+
+[pi]
+# Raspberry pi[s]
+bootstrapper.media.polarparty.no
+
+[pi:children]
+pi_2b
+pi_3b
+
 
 [lunix:children]
 uis
-bootstrap
+pi
+
+[k3s_aio]
+# All-in-one k3s setups, with server and agent running on the same node
+uis-01.media.polarparty.no
+
+[k3s_servers]
+[k3s_servers:children]
+# k3s servers running API, includes AIO servers
+k3s_aio
+
+[k3s_agents]
+[k3s_agents:children]
+# k3s agents running pods, includes AIO servers
+# k3s_aio
+
+
+[k3s]
+[k3s:children]
+# All hosts participating in the k3s cluster
+k3s_agents
+k3s_servers
+
+[casparcg]
+uis-02.media.polarparty.no casparcg_role=vb casparcg_consumer=screen
+uis-03.media.polarparty.no casparcg_role=gfx casparcg_consumer=screen

@@ -1,0 +1,42 @@
+---
+- name: "Install packages"
+  apt:
+    state: present
+    name: "casparcg-server"
+
+- name: "Create config dir"
+  ansible.builtin.file:
+    path: "{{ casparcg_config_dir }}"
+    state: directory
+
+- name: "Create content dir"
+  ansible.builtin.file:
+    path: "{{ casparcg_content_dir }}"
+    state: directory
+
+- name: "Deploy Caspar config"
+  template:
+    src: "casparcg/casparcg.config.j2"
+    dest: "{{ casparcg_config_dir }}/casparcg.config"
+
+# - name: "Deploy scanner service file"
+#   template:
+#     src: "casparcg/casparcg-scanner.service.j2"
+#     dest: "/etc/systemd/system/casparcg-scanner.service"
+
+- name: "Deploy server service file"
+  template:
+    src: "casparcg/casparcg-server.service.j2"
+    dest: "/etc/systemd/system/casparcg-server.service"
+
+# - name: "Start and enable scanner service"
+#   ansible.builtin.systemd_service:
+#     name: "casparcg-scanner"
+#     state: started
+#     enabled: true
+
+- name: "Start and enable server service"
+  ansible.builtin.systemd_service:
+    name: "casparcg-server"
+    state: started
+    enabled: true

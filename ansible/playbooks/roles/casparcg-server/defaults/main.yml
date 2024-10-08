@@ -1,0 +1,5 @@
+# casparcg_release: "2.3.3+dsfg-3+b1"
+casparcg_video_mode: "1080p5000"
+casparcg_screen_consumer: true
+casparcg_config_dir: "/etc/casparcg-server"
+casparcg_content_dir: "/usr/share/casparcg-server"

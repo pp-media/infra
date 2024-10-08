@@ -1,0 +1,22 @@
+---
+- ansible.builtin.include_tasks:
+    file: "configure_firewall.yml"
+  name: "Prep hosts for k3s: firewall"
+
+- ansible.builtin.include_tasks:
+    file: "prep_cluster.yml"
+  name: "Prep hosts for k3s: prep tasks"
+
+- ansible.builtin.include_tasks:
+    file: "setup_servers.yml"
+  name: "Set up k3s servers"
+  when: inventory_hostname in groups["k3s_servers"]
+
+- ansible.builtin.include_tasks:
+    file: "setup_agents.yml"
+  name: "Set up k3s agents"
+  when: inventory_hostname in groups["k3s_agents"]
+
+- ansible.builtin.include_tasks:
+    file: "install_k9s.yml"
+  name: "Install k9s"

@@ -1,0 +1,19 @@
+---
+vlan_ppmedia: 101
+
+k3s_version: "v1.30.5+k3s1"
+k3s_subnet_pods: "10.42.0.0/16"
+k3s_subnet_services: "10.43.0.0/16"
+
+k3s_server_location: "/var/lib/rancher/k3s"
+systemd_dir: "/etc/systemd/system"  # noqa var-naming[no-role-prefix]
+api_port: 6443  # noqa var-naming[no-role-prefix]
+api_endpoint: "{{ hostvars[groups['k8s_servers'][0]]['ansible_host'] | default(groups['k8s_servers'][0]) }}"
+kubeconfig: ~/.kube/config.new  # noqa var-naming[no-role-prefix]
+user_kubectl: true  # noqa var-naming[no-role-prefix]
+cluster_context: ppmedia-k3s  # noqa var-naming[no-role-prefix]
+use_external_database: false # noqa var-naming[no-role-prefix]
+extra_server_args: ""
+extra_agent_args: ""
+
+k9s_release: "v0.32.5"

@@ -1,18 +1,22 @@
 # VLANs
 
-* 100: WAN (Polar nett)
-* 101: PP Media host
-* 102: KANDU video rigs
+> Keep this in sync with playbooks/roles/common/defaults/main.yml
+
+* 950: WAN (Polar nett)
+* 951: PP Media host
+* 952: KANDU video rigs
+* 953: DANTE (audio)
+* 954: Art-net (lights)
 
 # Ports
 
 ## ER-X
 
 * eth0: WAN setup link (no VLAN)
-* eth1: Bootstrapper (untag VLAN 101)
-* eth2: PP hosts (untag VLAN 101, tag everything else)
-* eth4: KANDU video rig (untag VLAN 102)
-* eth5: WAN permanent link (VLAN 100)
+* eth1: Bootstrapper (untag VLAN 951)
+* eth2: PP hosts (untag VLAN 951, tag everything else)
+* eth4: KANDU video rig (untag VLAN 952)
+* eth5: WAN permanent link (VLAN 950)
 
 # Routing
 
@@ -22,17 +26,17 @@
   - Mode: DHCP
   - Route for 0.0.0.0/0
 
-* VLAN 100
+* VLAN 950
   - Mode: Static
   - Address: 256.256.256.130/27
   - GW: 256.256.256.129
   - Route for 0.0.0.0/0
 
-* VLAN 101
+* VLAN 951
   - Mode: Static
   - Address: 192.168.111.1/24
 
-* VLAN 102
+* VLAN 952
   - Mode: Static
   - Address: 192.168.10.1/24
   
@@ -80,7 +84,7 @@
 
 # KANDU video rigs: 192.168.10.0/24
 
-* 192.168.10.1: ER-X (VLAN 102)
+* 192.168.10.1: ER-X (VLAN 952)
 
 ## Misc .2-15
 
@@ -119,4 +123,14 @@
 * 192.168.10.133: HE-130 (Cam 5)
 * 192.168.10.134: HE-130 (Cam 6)
 * 192.168.10.135: HE-130 (Cam 7)
+
+## PP hosts .161-199
+
+* 192.168.10.163: uis-01
+* 192.168.10.164: uis-02
+* 192.168.10.165: uis-03
+* 192.168.10.166: uis-04
+* 192.168.10.167: uis-05
+* 192.168.10.168: uis-06
+* 192.168.10.169: uis-07
 

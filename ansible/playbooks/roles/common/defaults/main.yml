@@ -1,0 +1,15 @@
+---
+# Keep this in sync with inventory/network.md
+vlan_wan: 950
+vlan_ppmedia: 951
+vlan_kandu: 952
+vlan_dante: 953
+vlan_artnet: 954
+
+addr_prefix_ppmedia: "192.168.111"
+subnet_ppmedia: "192.168.111.0/24"
+gateway_ppmedia: "192.168.111.1"
+
+addr_prefix_kandu: "192.168.10"
+net_prefix_kandu: 24
+

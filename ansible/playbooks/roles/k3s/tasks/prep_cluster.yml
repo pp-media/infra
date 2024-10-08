@@ -1,0 +1,71 @@
+---
+# Liberally inspired by https://github.com/k3s-io/k3s-ansible/blob/master/roles/prereq/tasks/main.yml
+- name: Enforce minimum Ansible version
+  ansible.builtin.assert:
+    that:
+      - ansible_version.full is version('2.14', '>=')
+    msg: "Minimum ansible-core version required is 2.14"
+
+- name: Enable IPv4 forwarding
+  ansible.posix.sysctl:
+    name: net.ipv4.ip_forward
+    value: "1"
+    state: present
+    reload: true
+
+- name: Gather the package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: Setup alternative K3s directory
+  when:
+    - k3s_server_location is defined
+    - k3s_server_location != "/var/lib/rancher/k3s"
+  block:
+    - name: Make rancher directory
+      ansible.builtin.file:
+        path: "/var/lib/rancher"
+        mode: "0755"
+        state: directory
+    - name: Create symlink
+      ansible.builtin.file:
+        dest: /var/lib/rancher/k3s
+        src: "{{ k3s_server_location }}"
+        force: true
+        state: link
+
+- name: Setup extra manifests
+  when: extra_manifests is defined
+  block:
+    - name: Make manifests directory
+      ansible.builtin.file:
+        path: "/var/lib/rancher/k3s/server/manifests"
+        mode: "0700"
+        state: directory
+    - name: Copy manifests
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "/var/lib/rancher/k3s/server/manifests"
+        mode: "0600"
+      loop: "{{ extra_manifests }}"
+
+- name: Setup optional private registry configuration
+  when: registries_config_yaml is defined
+  block:
+    - name: Make k3s config directory
+      ansible.builtin.file:
+        path: "/etc/rancher/k3s"
+        mode: "0755"
+        state: directory
+    - name: Copy config values
+      ansible.builtin.copy:
+        content: "{{ registries_config_yaml }}"
+        dest: "/etc/rancher/k3s/registries.yaml"
+        mode: "0644"
+
+- name: "Install management utilities on nodes"
+  apt:
+    state: latest
+    install_recommends: true
+    package:
+    - k9s

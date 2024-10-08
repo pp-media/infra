@@ -1,0 +1,44 @@
+---
+- name: "Get name of wired physical interface"
+  shell: "find /sys/class/net -type l -not -lname '*virtual*' -printf '%f\n' | grep -e '^[^w]' | head -n 1"
+  register: _phy_if_cmd
+  check_mode: no
+  when: phy_if is undefined
+
+- name: "Register wired interface as fact"
+  ansible.builtin.set_fact:
+    phy_if: "{{ _phy_if_cmd.stdout }}"
+  when: phy_if is undefined
+
+- name: "Enable 8021q kernel module"
+  community.general.modprobe:
+    name: 8021q
+    state: present
+    persistent: present
+  when: vlan is undefined or not vlan
+
+- name: "Install VLAN package"
+  apt:
+    state: latest
+    update_cache: false
+    package:
+    - vlan
+
+- name: "Set Tailscale and Mulvad as DNS"
+  template:
+    src: network/resolv.conf.j2
+    dest: /etc/resolv.conf
+
+- name: "Update core networking config"
+  template:
+    src: network/interfaces.j2
+    dest: /etc/network/interfaces
+  when: vlan is undefined or not vlan
+  notify: restart network
+
+- name: "Yoink new interface config into place for VLAN-enabled hosts"
+  template:
+    src: network/interfaces-ppnet.j2
+    dest: /etc/network/interfaces.d/ppnet
+  notify: restart network
+  when: hostid is not undefined and (vlan | default(true))
